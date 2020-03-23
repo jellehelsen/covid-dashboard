@@ -2,7 +2,7 @@ import React from 'react';
 import Chartkick, { ColumnChart, GeoChart } from 'react-chartkick'
 import { withStyles } from '@material-ui/core/styles';
 
-Chartkick.configure({mapsApiKey: "AIzaSyC7fIf3wquhh92a9cS7JE4vTSvWZ7MzwCU"})
+Chartkick.configure({mapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY})
 const useStyles = theme => ({
     root: {
         backgroundColor: theme.palette.background.paper,

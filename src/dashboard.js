@@ -344,12 +344,18 @@ class Dashboard extends React.Component {
                             Object.keys(groupValue.data).forEach(k => {
                                 groupValue.data[k] += val[k]
                             })
+                            let keys = Object.keys(val)
+                            let current = val[keys[keys.length-1]]
+                            groupValue.current += current
+                            console.log(`${country}: ${current} ${groupValue.current}`)
                         } else {
                             out.name = groups[country]
                             out.population = population[out.name]
                             delete val["Province/State"]
                             delete val["Country/Region"]
                             out.data = val
+                            let keys = Object.keys(val)
+                            out.current = val[keys[keys.length-1]]
                             data.push(out)
                             groupValues[country] = out
                         }
@@ -364,6 +370,8 @@ class Dashboard extends React.Component {
                         delete val["Province/State"]
                         delete val["Country/Region"]
                         out.data = val
+                        let keys = Object.keys(val)
+                        out.current = val[keys[keys.length-1]]
                         data.push(out)
                     }
                 }

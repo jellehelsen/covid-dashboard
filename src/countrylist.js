@@ -38,15 +38,20 @@ class CountryList extends React.Component {
     render() {
         const { countries, classes } = this.props
         const { checked } = this.state
+        let countryList = countries.sort((a, b) => {
+            if(a.current > b.current) return -1
+            if(b.current > a.current) return 1
+            return 0
+        })
         return (
             <List className={classes.list}>
-                {countries.map(country => {
+                {countryList.map(country => {
                     return (
                           <ListItem key={country.name} onClick={this.handleToggle}>
                             <ListItemIcon>
                             <Checkbox checked={checked.indexOf(country.name) !== -1}/>
                             </ListItemIcon>
-                          <ListItemText primary={country.name}/>
+                          <ListItemText primary={country.name} secondary={country.current}/>
                       </ListItem>
                     )
                 })}

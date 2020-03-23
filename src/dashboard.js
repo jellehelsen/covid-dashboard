@@ -313,6 +313,7 @@ class Dashboard extends React.Component {
             countries: [],
             selectedCountries: [],
         }
+        this.setSelectedCountries = this.setSelectedCountries.bind(this)
     }
 
     componentDidMount() {
@@ -341,7 +342,6 @@ class Dashboard extends React.Component {
                                 groupValue.data[k] += val[k]
                             })
                         } else {
-                            // debugger
                             out.name = groups[country]
                             delete val["Province/State"]
                             delete val["Country/Region"]
@@ -353,7 +353,6 @@ class Dashboard extends React.Component {
                       out.name = val["Country/Region"]
                       if(val["Province/State"]){
                           out.name = val["Province/State"]
-                          // out.name = `${val["Province/State"]}, ${val["Country/Region"]}`
                       }
                       delete val.Lat
                       delete val.Long
@@ -368,12 +367,20 @@ class Dashboard extends React.Component {
         })
     }
 
+    setSelectedCountries(selected){
+        const { countries } = this.state;
+        let selectedCountries = countries.filter(c => {
+            return selected.includes(c.name)
+        })
+        this.setState({selectedCountries: selectedCountries})
+    }
+
     render() {
         const { classes } = this.props;
         let { countries, selectedCountries } = this.state;
         return (
             <Container className={classes.root}>
-                <CountryList countries={countries}/>
+                <CountryList countries={countries} setSelectedCountries={this.setSelectedCountries}/>
                 <MainView countries={countries} selected={selectedCountries}/>
             </Container>
         )

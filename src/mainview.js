@@ -1,25 +1,33 @@
 import React from 'react';
-import Chartkick, { LineChart, GeoChart } from 'react-chartkick'
+import Chartkick, { ColumnChart, GeoChart } from 'react-chartkick'
 import { withStyles } from '@material-ui/core/styles';
-import Chart from './chart';
 
 Chartkick.configure({mapsApiKey: "AIzaSyC7fIf3wquhh92a9cS7JE4vTSvWZ7MzwCU"})
 const useStyles = theme => ({
     root: {
         backgroundColor: theme.palette.background.paper,
         width: '100%',
+        marginTop: 20,
     }
 })
 
 
 class MainView extends React.Component {
     render() {
-        const { countries, selected, classes } = this.props;
+        const { countries, selected, classes, relative } = this.props;
+        let xtitle = "Date", ytitle = "Confirmed cases";
         let data = countries.map(country => {
             let keys = Object.keys(country.data)
-            return [country.name, country.data[keys[keys.length - 1]]]
+            let current = country.data[keys[keys.length - 1]]
+            if(relative) {
+                if(!country.population) {
+                    console.log(country.name)
+                }
+                current = current / country.population
+            }
+            return [country.name, current]
         })
-        let chartData = selected
+        let chartData = JSON.parse(JSON.stringify(selected))
         if (selected.length === 0 && countries.length > 0) {
             let total = countries.slice(1).reduce((counter, country) => {
                 Object.keys(country.data).forEach(key => {
@@ -27,7 +35,15 @@ class MainView extends React.Component {
                 })
                 return counter
             }, Object.assign({}, countries[0].data))
-            chartData = [{name: "Worldwide", data: total}]
+            chartData = [{name: "Worldwide", data: total, population: 7700000}]
+        }
+        if(relative){
+            ytitle = "Confirmed cases per capita"
+            chartData.forEach(country => {
+              Object.keys(country.data).forEach(key => {
+                  country.data[key] = country.data[key]/country.population
+              })
+            })
         }
         const mapOptions = {
             legend: {position: "left"},
@@ -36,7 +52,7 @@ class MainView extends React.Component {
         return (
                 <div className={classes.root}>
                 <GeoChart width='100%' height='55%' data={data} library={mapOptions}/>
-                <Chart data={chartData}/>
+                <ColumnChart data={chartData} xtitle={xtitle} ytitle={ytitle}/>
                 </div>
         )
     }

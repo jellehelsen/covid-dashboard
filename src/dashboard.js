@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container } from '@material-ui/core';
+import { Container, AppBar, Toolbar, RadioGroup, Radio, FormControlLabel } from '@material-ui/core';
 import CountryList from './countrylist';
 import MainView from './mainview'
 import Papa from 'papaparse';
@@ -28,6 +28,7 @@ const population = {
     "Austria": 8955.102,
     "Azerbaijan": 10047.718,
     "Bahamas": 389.482,
+    "Bahamas, The": 389.482,
     "Bahrain": 1641.172,
     "Bangladesh": 163046.161,
     "Barbados": 287.025,
@@ -37,17 +38,18 @@ const population = {
     "Benin": 11801.151,
     "Bermuda": 62.506,
     "Bhutan": 763.092,
-    "Bolivia (Plurinational State of)": 11513.1,
+    "Bolivia": 11513.1,
     "Bonaire, Sint Eustatius and Saba": 25.979,
     "Bosnia and Herzegovina": 3301,
     "Botswana": 2303.697,
     "Brazil": 211049.527,
     "British Virgin Islands": 30.03,
-    "Brunei Darussalam": 433.285,
+    "Brunei": 433.285,
     "Bulgaria": 7000.119,
     "Burkina Faso": 20321.378,
     "Burundi": 11530.58,
     "Cabo Verde": 549.935,
+    "Cape Verde": 549.935,
     "Cambodia": 16486.542,
     "Cameroon": 25876.38,
     "Canada": 37411.047,
@@ -63,20 +65,22 @@ const population = {
     "China": 1433783.686,
     "China, Hong Kong SAR": 7436.154,
     "China, Macao SAR": 640.445,
+    "Taiwan*": 23780.452,
+    "Diamond Princess": 3.711,
     "Other non-specified areas": 23773.876,
     "Colombia": 50339.443,
     "Comoros": 850.886,
-    "Congo": 5380.508,
+    "Congo (Brazzaville)": 5380.508,
     "Cook Islands": 17.548,
     "Costa Rica": 5047.561,
-    "Côte d'Ivoire": 25716.544,
+    "Cote d'Ivoire": 25716.544,
     "Croatia": 4130.304,
     "Cuba": 11333.483,
-    "Curaçao": 163.424,
+    "Curacao": 163.424,
     "Cyprus": 1198.575,
     "Czechia": 10689.209,
     "Dem. People's Republic of Korea": 25666.161,
-    "Democratic Republic of the Congo": 86790.567,
+    "Congo (Kinshasa)": 86790.567,
     "Denmark": 5771.876,
     "Djibouti": 973.56,
     "Dominica": 71.808,
@@ -93,9 +97,6 @@ const population = {
     "Estonia": 1325.648,
     "Eswatini": 1148.13,
     "Ethiopia": 112078.73,
-    "Europe": 747182.751,
-    "Europe__1": 747182.751,
-    "Europe and Northern America": 1113783.715,
     "Falkland Islands (Malvinas)": 3.377,
     "Faroe Islands": 48.678,
     "Fiji": 889.953,
@@ -104,7 +105,7 @@ const population = {
     "French Guiana": 290.832,
     "French Polynesia": 279.287,
     "Gabon": 2172.579,
-    "Gambia": 2347.706,
+    "Gambia, The": 2347.706,
     "Georgia": 3996.765,
     "Germany": 83517.045,
     "Ghana": 30417.856,
@@ -126,7 +127,7 @@ const population = {
     "Iceland": 339.031,
     "India": 1366417.754,
     "Indonesia": 270625.568,
-    "Iran (Islamic Republic of)": 82913.906,
+    "Iran": 82913.906,
     "Iraq": 39309.783,
     "Ireland": 4882.495,
     "Isle of Man": 84.584,
@@ -140,17 +141,10 @@ const population = {
     "Kiribati": 117.606,
     "Kuwait": 4207.083,
     "Kyrgyzstan": 6415.85,
-    "Land-locked Developing Countries (LLDC)": 520972.677,
     "Lao People's Democratic Republic": 7169.455,
-    "Latin America and the Caribbean": 648120.957,
-    "Latin America and the Caribbean__1": 648120.957,
     "Latvia": 1906.743,
-    "Least developed countries": 1033388.876,
     "Lebanon": 6855.713,
     "Lesotho": 2125.268,
-    "Less developed regions": 6442837.823,
-    "Less developed regions, excluding China": 4977203.662,
-    "Less developed regions, excluding least developed countries": 5409448.947,
     "Liberia": 4937.374,
     "Libya": 6777.452,
     "Liechtenstein": 38.019,
@@ -217,19 +211,19 @@ const population = {
     "Portugal": 10226.187,
     "Puerto Rico": 2933.408,
     "Qatar": 2832.067,
-    "Republic of Korea": 51225.308,
-    "Republic of Moldova": 4043.263,
+    "Korea, South": 51225.308,
+    "Moldova": 4043.263,
     "Réunion": 888.927,
     "Romania": 19364.557,
-    "Russian Federation": 145872.256,
+    "Russia": 145872.256,
     "Rwanda": 12626.95,
     "Saint Helena": 6.059,
     "Saint Kitts and Nevis": 52.823,
     "Saint Lucia": 182.79,
     "Saint Pierre and Miquelon": 5.822,
     "Saint Vincent and the Grenadines": 110.589,
-    "Saint-Barthélemy": 9.847,
-    "Saint-Martin (French part)": 38.002,
+    "Saint Barthelemy": 9.847,
+    "St Martin": 38.002,
     "Samoa": 197.097,
     "San Marino": 33.86,
     "Sao Tome and Principe": 215.056,
@@ -239,7 +233,7 @@ const population = {
     "Seychelles": 97.739,
     "Sierra Leone": 7813.215,
     "Singapore": 5804.337,
-    "Sint Maarten (Dutch part)": 42.388,
+    "Sint Maarten": 42.388,
     "Slovakia": 5457.013,
     "Slovenia": 2078.654,
     "Small Island Developing States (SIDS)": 71428.792,
@@ -260,9 +254,10 @@ const population = {
     "Suriname": 581.372,
     "Sweden": 10036.379,
     "Switzerland": 8591.365,
-    "Syrian Arab Republic": 17070.135,
+    "Syria": 17070.135,
     "Tajikistan": 9321.018,
     "Thailand": 69625.582,
+    "East Timor": 1293.119,
     "Timor-Leste": 1293.119,
     "Togo": 8082.366,
     "Tokelau": 1.34,
@@ -277,15 +272,15 @@ const population = {
     "Ukraine": 43993.638,
     "United Arab Emirates": 9770.529,
     "United Kingdom": 67530.172,
-    "United Republic of Tanzania": 58005.463,
-    "United States of America": 329064.917,
+    "Tanzania": 58005.463,
+    "United States": 329064.917,
     "United States Virgin Islands": 104.578,
     "Upper-middle-income countries": 2638958.413,
     "Uruguay": 3461.734,
     "Uzbekistan": 32981.716,
     "Vanuatu": 299.882,
-    "Venezuela (Bolivarian Republic of)": 28515.829,
-    "Viet Nam": 96462.106,
+    "Venezuela": 28515.829,
+    "Vietnam": 96462.106,
     "Wallis and Futuna Islands": 11.432,
     "Western Africa": 391440.157,
     "Western Asia": 275324.813,
@@ -294,7 +289,9 @@ const population = {
     "World": 7713468.1,
     "Yemen": 29161.922,
     "Zambia": 17861.03,
-    "Zimbabwe": 14645.468
+    "Zimbabwe": 14645.468,
+    "Kosovo": 1810,
+    "Reunion": 859.959,
 }
 
 const useStyles = theme => ({
@@ -303,6 +300,7 @@ const useStyles = theme => ({
         display: 'flex',
         height: '100%',
         maxWidth: '100%',
+        marginTop: 60
     }
 })
 
@@ -312,8 +310,10 @@ class Dashboard extends React.Component {
         this.state = {
             countries: [],
             selectedCountries: [],
+            relativeOrAbsolute: 'absolute',
         }
         this.setSelectedCountries = this.setSelectedCountries.bind(this)
+        this.handleNumbersChange = this.handleNumbersChange.bind(this)
     }
 
     componentDidMount() {
@@ -343,6 +343,7 @@ class Dashboard extends React.Component {
                             })
                         } else {
                             out.name = groups[country]
+                            out.population = population[out.name]
                             delete val["Province/State"]
                             delete val["Country/Region"]
                             out.data = val
@@ -350,16 +351,17 @@ class Dashboard extends React.Component {
                             groupValues[country] = out
                         }
                     } else {
-                      out.name = val["Country/Region"]
-                      if(val["Province/State"]){
-                          out.name = val["Province/State"]
-                      }
-                      delete val.Lat
-                      delete val.Long
-                      delete val["Province/State"]
-                      delete val["Country/Region"]
-                      out.data = val
-                      data.push(out)
+                        out.name = val["Country/Region"]
+                        if(val["Province/State"]){
+                            out.name = val["Province/State"]
+                        }
+                        out.population = population[out.name]
+                        delete val.Lat
+                        delete val.Long
+                        delete val["Province/State"]
+                        delete val["Country/Region"]
+                        out.data = val
+                        data.push(out)
                     }
                 }
                 this.setState({countries: data})
@@ -375,13 +377,25 @@ class Dashboard extends React.Component {
         this.setState({selectedCountries: selectedCountries})
     }
 
+    handleNumbersChange(event){
+        this.setState({relativeOrAbsolute: event.target.value})
+    }
+
     render() {
         const { classes } = this.props;
-        let { countries, selectedCountries } = this.state;
+        let { countries, selectedCountries, relativeOrAbsolute } = this.state;
         return (
             <Container className={classes.root}>
+                <AppBar>
+                <Toolbar>
+                <RadioGroup row value={relativeOrAbsolute} onChange={this.handleNumbersChange}>
+                      <FormControlLabel value="absolute" control={<Radio />} label="Absolute numbers" />
+                      <FormControlLabel value="capita" control={<Radio />} label="Per capita" />
+                </RadioGroup>
+                </Toolbar>
+                </AppBar>
                 <CountryList countries={countries} setSelectedCountries={this.setSelectedCountries}/>
-                <MainView countries={countries} selected={selectedCountries}/>
+                <MainView countries={countries} selected={selectedCountries} relative={relativeOrAbsolute === 'capita'}/>
             </Container>
         )
     }

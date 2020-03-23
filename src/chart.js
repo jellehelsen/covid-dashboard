@@ -1,15 +1,26 @@
 import React from 'react';
-import { LineChart, ColumnChart } from 'react-chartkick'
+import { LineChart } from 'react-chartkick'
 import 'chart.js'
 
 
-class Chart extends React.Component {
+class RelativeChart extends React.Component {
     render(){
         const { data } = this.props;
+        const ytitle = "Confirmed cases per capita",
+              xtitle = "Date"
+        const chartData = data.reduce((collection, country) =>{
+            let relativeCountry = Object.assign({}, country, {data: {}})
+            Object.keys(country.data).forEach(key => {
+                relativeCountry.data[key] = country.data[key]/country.population
+            })
+            collection.push(relativeCountry)
+            return collection
+
+        }, [])
         return (
-            <ColumnChart data={data} xtitle="Days since 10 confirmed" ytitle="Confirmed per capita"/>
+                <LineChart data={chartData} xtitle={xtitle} ytitle={ytitle}/>
         )
     }
 }
 
-export default Chart;
+export default RelativeChart;

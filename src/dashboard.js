@@ -328,8 +328,7 @@ class Dashboard extends React.Component {
             header: true,
             dynamicTyping: true,
             complete: (results) => {
-                let data = [],
-                    us = null;
+                let data = [];
                 for (let i=0;i<results.data.length;i++) {
                     let out = {},
                         val = results.data[i],

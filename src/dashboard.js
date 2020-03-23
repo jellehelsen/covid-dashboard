@@ -6,8 +6,10 @@ import Papa from 'papaparse';
 import { withStyles } from '@material-ui/core/styles';
 // import Chart from './chart';
 
-const cases = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv"
-const deaths = "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv"
+const urls = {
+    cases: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Confirmed.csv",
+    deaths: "https://raw.githubusercontent.com/CSSEGISandData/COVID-19/master/csse_covid_19_data/csse_covid_19_time_series/time_series_19-covid-Deaths.csv",
+}
 
 const population = {
     "Afghanistan": 38041.754,
@@ -311,15 +313,17 @@ class Dashboard extends React.Component {
             countries: [],
             selectedCountries: [],
             relativeOrAbsolute: 'absolute',
+            whichData: 'cases'
         }
         this.setSelectedCountries = this.setSelectedCountries.bind(this)
         this.handleNumbersChange = this.handleNumbersChange.bind(this)
+        this.handleChangeDataType = this.handleChangeDataType.bind(this)
     }
 
-    componentDidMount() {
+    loadData(url) {
         const groups = {US: "United States", Canada: "Canada", China: "China", Australia: "Australia"}
         let groupValues = {}
-        Papa.parse(cases, {
+        Papa.parse(url, {
             download: true,
             header: true,
             dynamicTyping: true,
@@ -369,6 +373,10 @@ class Dashboard extends React.Component {
         })
     }
 
+    componentDidMount() {
+        this.loadData(urls[this.state.whichData])
+    }
+
     setSelectedCountries(selected){
         const { countries } = this.state;
         let selectedCountries = countries.filter(c => {
@@ -381,9 +389,14 @@ class Dashboard extends React.Component {
         this.setState({relativeOrAbsolute: event.target.value})
     }
 
+    handleChangeDataType(event){
+        this.setState({whichData: event.target.value})
+        this.loadData(urls[event.target.value])
+    }
+
     render() {
         const { classes } = this.props;
-        let { countries, selectedCountries, relativeOrAbsolute } = this.state;
+        let { countries, selectedCountries, relativeOrAbsolute, whichData } = this.state;
         return (
             <Container className={classes.root}>
                 <AppBar>
@@ -391,6 +404,10 @@ class Dashboard extends React.Component {
                 <RadioGroup row value={relativeOrAbsolute} onChange={this.handleNumbersChange}>
                       <FormControlLabel value="absolute" control={<Radio />} label="Absolute numbers" />
                       <FormControlLabel value="capita" control={<Radio />} label="Per capita" />
+                </RadioGroup>
+                <RadioGroup row value={whichData} onChange={this.handleChangeDataType}>
+                      <FormControlLabel value="cases" control={<Radio />} label="Confirmed cases" />
+                      <FormControlLabel value="deaths" control={<Radio />} label="Deaths" />
                 </RadioGroup>
                 </Toolbar>
                 </AppBar>

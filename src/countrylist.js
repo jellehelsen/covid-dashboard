@@ -11,6 +11,29 @@ const useStyles = theme => ({
     }
 })
 
+class CountryItem extends React.Component {
+    constructor(props){
+        super(props)
+        this.handleClick = this.handleClick.bind(this)
+    }
+
+    handleClick(){
+        const { handleToggle, country } = this.props;
+        handleToggle(country.name)
+    }
+
+    render(){
+        const { country, checked } = this.props;
+        return (
+            <ListItem onClick={this.handleClick}>
+              <ListItemIcon>
+                <Checkbox  checked={checked} />
+              </ListItemIcon>
+              <ListItemText primary={country.name} secondary={country.current} />
+            </ListItem>
+        )
+    }
+}
 
 class CountryList extends React.Component {
     constructor(props){
@@ -19,9 +42,8 @@ class CountryList extends React.Component {
         this.handleToggle = this.handleToggle.bind(this)
     }
 
-    handleToggle(event){
-        const value = event.target.textContent,
-              { checked } = this.state,
+    handleToggle(value) {
+        const { checked } = this.state,
               currentIndex = checked.indexOf(value),
               newChecked = [...checked];
         const { setSelectedCountries } = this.props
@@ -46,14 +68,11 @@ class CountryList extends React.Component {
         return (
             <List className={classes.list}>
                 {countryList.map(country => {
-                    return (
-                          <ListItem key={country.name} onClick={this.handleToggle}>
-                            <ListItemIcon>
-                            <Checkbox checked={checked.indexOf(country.name) !== -1}/>
-                            </ListItemIcon>
-                          <ListItemText primary={country.name} secondary={country.current}/>
-                      </ListItem>
-                    )
+                    return (<CountryItem
+                       key={country.name}
+                        country={country}
+                       handleToggle={this.handleToggle}
+                       checked={checked.indexOf(country.name) !== -1}/>)
                 })}
             </List>
         )

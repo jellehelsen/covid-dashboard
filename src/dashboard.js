@@ -347,7 +347,6 @@ class Dashboard extends React.Component {
                             let keys = Object.keys(val)
                             let current = val[keys[keys.length-1]]
                             groupValue.current += current
-                            console.log(`${country}: ${current} ${groupValue.current}`)
                         } else {
                             out.name = groups[country]
                             out.population = population[out.name]

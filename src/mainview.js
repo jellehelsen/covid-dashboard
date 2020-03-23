@@ -1,5 +1,5 @@
 import React from 'react';
-import Chartkick, { ColumnChart, GeoChart } from 'react-chartkick'
+import Chartkick, { LineChart, GeoChart } from 'react-chartkick'
 import { withStyles } from '@material-ui/core/styles';
 
 Chartkick.configure({mapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY})
@@ -52,7 +52,7 @@ class MainView extends React.Component {
         return (
                 <div className={classes.root}>
                 <GeoChart width='100%' height='55%' data={data} library={mapOptions}/>
-                <ColumnChart data={chartData} xtitle={xtitle} ytitle={ytitle}/>
+                <LineChart data={chartData} xtitle={xtitle} ytitle={ytitle}/>
                 </div>
         )
     }
